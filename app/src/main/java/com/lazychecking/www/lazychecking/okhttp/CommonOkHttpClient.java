@@ -1,7 +1,5 @@
 package com.lazychecking.www.lazychecking.okhttp;
 
-import android.util.Log;
-
 import com.lazychecking.www.lazychecking.okhttp.https.HttpsUtils;
 import com.lazychecking.www.lazychecking.okhttp.listener.DisposeDataHandle;
 import com.lazychecking.www.lazychecking.okhttp.response.CommonFileCallback;
@@ -81,10 +79,13 @@ public class CommonOkHttpClient {
         return  call;
     }
     public static  Call upLoadpic(Request request, DisposeDataHandle handle){
-        OkHttpClient client=new OkHttpClient();
-        Call call=client.newCall(request);
+        Call call=mOkHttpClient.newCall(request);
+
+       // Call call=client.newCall(request);
         call.enqueue(new CommonJsonCallback(handle));
-        Log.i("info1", "upLoadpic: ");
+
+
+
         return  call;
     }
 }

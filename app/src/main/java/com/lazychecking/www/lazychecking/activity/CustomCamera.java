@@ -85,7 +85,7 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
                     bos.write(data);
                     bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);//将图片压缩到流中
 
-                    paramms.put(filePath,file);
+                    paramms.put(file.getName(),file);
                     RequestCenter.requestUpload(HttpConstants.UPLOAD, paramms, new DisposeDataListener() {
                         @Override
                         public void onSuccess(Object object) {
@@ -99,10 +99,13 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
                         }
                     });
 
+
                 }else{
                    // Toast.makeText(mContext,"没有检测到内存卡", Toast.LENGTH_SHORT).show();
                     Log.i("info1", "222");
                 }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.i("info1", "onPictureTaken1: ");

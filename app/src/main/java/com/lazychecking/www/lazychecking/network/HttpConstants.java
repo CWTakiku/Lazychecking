@@ -7,7 +7,7 @@ public class HttpConstants {
     /**
      * 方便我们更改地址
      */
-    private static final String ROOT_URL = "http://lazy/check/";
+    private static final String ROOT_URL = "http://imooc/";
 
     /**
      * 试卷上传接口

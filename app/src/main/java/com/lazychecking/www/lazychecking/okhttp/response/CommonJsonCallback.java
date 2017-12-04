@@ -77,7 +77,7 @@ public class CommonJsonCallback implements Callback {
     public void onResponse(final Call call, final Response response) throws IOException {
 
         final String result = response.body().string();
-        Log.i("info1", "onResponse: "+result);
+        Log.i("info1", "onResponse1: "+result);
         final ArrayList<String> cookieLists = handleCookie(response.headers());
         mDeliveryHandler.post(new Runnable() {
             @Override
@@ -105,6 +105,7 @@ public class CommonJsonCallback implements Callback {
 
     private void handleResponse(Object responseObj) {
         if (responseObj == null || responseObj.toString().trim().equals("")) {
+            Log.i("info1", "handleResponse1: "+ responseObj.toString().trim().equals(""));
             mListener.onFailure(new OkHttpException(NETWORK_ERROR, EMPTY_MSG));
             return;
         }
