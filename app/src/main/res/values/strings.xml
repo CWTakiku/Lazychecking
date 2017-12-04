@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Lazy checking</string>
+    <string name="home_image_view_text">扫描</string>
+    <string name="pond_image_view_text">鱼塘</string>
+    <string name="message_image_view_text">消息</string>
+    <string name="mine_image_view_text">我的</string>
+</resources>
