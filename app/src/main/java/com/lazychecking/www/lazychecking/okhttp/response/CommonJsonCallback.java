@@ -64,6 +64,7 @@ public class CommonJsonCallback implements Callback {
         /**
          * 此时还在非UI线程，因此要转发
          */
+        Log.i("info1", "onFailure111: ");
         mDeliveryHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -76,7 +77,7 @@ public class CommonJsonCallback implements Callback {
     public void onResponse(final Call call, final Response response) throws IOException {
 
         final String result = response.body().string();
-        Log.i("info", "onResponse: "+result);
+        Log.i("info1", "onResponse: "+result);
         final ArrayList<String> cookieLists = handleCookie(response.headers());
         mDeliveryHandler.post(new Runnable() {
             @Override
@@ -114,10 +115,10 @@ public class CommonJsonCallback implements Callback {
              */
             JSONObject result = new JSONObject(responseObj.toString());
             if (mClass == null) {
-               // Log.i("info", "handleResponse: ");
+                Log.i("info1", "handleResponse: ");
                 mListener.onSuccess(result);
             } else {
-               // Log.i("info", "handleResponse1: ");
+                Log.i("info1", "handleResponse1: ");
                 Object obj = ResponseEntityToModule.parseJsonObjectToModule(result, mClass);
                 if (obj != null) {
                     mListener.onSuccess(obj);

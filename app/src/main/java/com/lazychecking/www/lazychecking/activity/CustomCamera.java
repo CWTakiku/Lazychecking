@@ -84,39 +84,18 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
                     bos = new BufferedOutputStream(new FileOutputStream(file));
                     bos.write(data);
                     bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);//将图片压缩到流中
-/*
-                    OkHttpClient client=new OkHttpClient();
-                    MediaType type=MediaType.parse("image/png");//"text/xml;charset=utf-8"
-                    RequestBody fileBody=RequestBody.create(type,file);
-                    Request request=new Request.Builder().url(HttpConstants.UPLOAD)
-                            .addHeader("User-Agent","android")
-                            .header("Content-Type","text/html; charset=utf-8;")
-                            .post(fileBody)//传参数、文件或者混合，改一下就行请求体就行
-                            .build();
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            Log.i("info1", "onFailure: ");
-                        }
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            Log.i("info1", "onSuccess: ");
-                        }
-                    });*/
-
-                    Log.i("info1", "111: ");
                     paramms.put(filePath,file);
-                    Log.i("info1", "222: ");
                     RequestCenter.requestUpload(HttpConstants.UPLOAD, paramms, new DisposeDataListener() {
                         @Override
                         public void onSuccess(Object object) {
-                            Log.i("info1", "onSuccess: ");
+
+                            Log.i("info1", "onSuccess: "+object.toString());
                         }
 
                         @Override
                         public void onFailure(Object object) {
-                            Log.i("info1", "onFailure: ");
+                            Log.i("info1", "onFailure: "+object.toString());
                         }
                     });
 

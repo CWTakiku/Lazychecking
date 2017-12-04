@@ -83,7 +83,7 @@ public class CommonOkHttpClient {
     public static  Call upLoadpic(Request request, DisposeDataHandle handle){
         OkHttpClient client=new OkHttpClient();
         Call call=client.newCall(request);
-        call.enqueue(new CommonFileCallback(handle));
+        call.enqueue(new CommonJsonCallback(handle));
         Log.i("info1", "upLoadpic: ");
         return  call;
     }
