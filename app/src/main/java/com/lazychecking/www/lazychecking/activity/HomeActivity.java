@@ -38,6 +38,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
     private TextView mMessageView;
     private TextView mMineView;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +69,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         mMessageView = (TextView) findViewById(R.id.message_image_view);
         mMineView = (TextView) findViewById(R.id.mine_image_view);
         mHomeView.setBackgroundResource(R.drawable.comui_tab_home_selected);
+
     }
    /*隐藏该Fragment*/
     private void hideFragment(Fragment mCommonFragment, FragmentTransaction fragmentTransaction){

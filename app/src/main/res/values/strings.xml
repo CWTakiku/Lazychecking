@@ -4,4 +4,11 @@
     <string name="pond_image_view_text">鱼塘</string>
     <string name="message_image_view_text">消息</string>
     <string name="mine_image_view_text">我的</string>
+    <string name="unlogin">你还未登录哦</string>
+    <string name="login_now">马上登录</string>
+    <string name="update_info">版本更新</string>
+    <string name="my_qrcode">关于</string>
+    <string name="share_imooc">分享</string>
+    <string name="video_play_setting">服务器IP设置</string>
+    <string name="input_ip">输入服务器IP</string>
 </resources>

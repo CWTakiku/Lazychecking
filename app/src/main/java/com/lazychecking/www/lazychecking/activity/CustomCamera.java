@@ -23,6 +23,7 @@ import com.lazychecking.www.lazychecking.network.HttpConstants;
 import com.lazychecking.www.lazychecking.network.RequestCenter;
 import com.lazychecking.www.lazychecking.okhttp.listener.DisposeDataListener;
 import com.lazychecking.www.lazychecking.okhttp.request.RequestParams;
+import com.lazychecking.www.lazychecking.okhttp.request.ThreadServer;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -84,22 +85,10 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
                     bos = new BufferedOutputStream(new FileOutputStream(file));
                     bos.write(data);
                     bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);//将图片压缩到流中
-
-                    paramms.put(file.getName(),file);
-                    RequestCenter.requestUpload(HttpConstants.UPLOAD, paramms, new DisposeDataListener() {
-                        @Override
-                        public void onSuccess(Object object) {
-
-                            Log.i("info1", "onSuccess: "+object.toString());
-                        }
-
-                        @Override
-                        public void onFailure(Object object) {
-                            Log.i("info1", "onFailure: "+object.toString());
-                        }
-                    });
-
-
+                    ThreadServer td=new ThreadServer(file);
+                    td.start();
+                    Log.i("info2", "after: ");
+                    //check(file);
                 }else{
                    // Toast.makeText(mContext,"没有检测到内存卡", Toast.LENGTH_SHORT).show();
                     Log.i("info1", "222");
@@ -123,6 +112,25 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
             }
 
         }};
+
+
+
+
+    private void check(File file) throws Exception{
+        paramms.put(file.getName(),file);
+        RequestCenter.requestUpload(HttpConstants.UPLOAD, paramms, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object object) {
+
+                Log.i("info1", "onSuccess: "+object.toString());
+            }
+
+            @Override
+            public void onFailure(Object object) {
+                Log.i("info1", "onFailure: "+object.toString());
+            }
+        });
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
