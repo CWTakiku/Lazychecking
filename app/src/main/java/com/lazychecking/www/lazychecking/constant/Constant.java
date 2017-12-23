@@ -24,4 +24,11 @@ public class Constant {
     public static String APP_PHOTO_DIR = Environment.
             getExternalStorageDirectory().getAbsolutePath().
             concat("/imooc_business/photo/");
+
+    /**
+     * 与消息相关的
+     */
+    public static final int MSG_FAILURE = 0x10;
+    public static final int MSG_SUCCESS =0X11;
+    public static final int MSG_RESEND=0x12;
 }

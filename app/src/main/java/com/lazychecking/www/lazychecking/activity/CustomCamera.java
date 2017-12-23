@@ -8,6 +8,8 @@ import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -16,20 +18,27 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.lazychecking.www.lazychecking.R;
 import com.lazychecking.www.lazychecking.activity.base.BaseActivity;
+import com.lazychecking.www.lazychecking.model.result.GradeResult;
 import com.lazychecking.www.lazychecking.network.HttpConstants;
+import com.lazychecking.www.lazychecking.network.Mrunnable;
 import com.lazychecking.www.lazychecking.network.RequestCenter;
 import com.lazychecking.www.lazychecking.okhttp.listener.DisposeDataListener;
 import com.lazychecking.www.lazychecking.okhttp.request.RequestParams;
-import com.lazychecking.www.lazychecking.okhttp.request.ThreadServer;
+import com.lazychecking.www.lazychecking.view.fragment.dialog.GetGradeDialog;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+
+import static com.lazychecking.www.lazychecking.constant.Constant.MSG_FAILURE;
+import static com.lazychecking.www.lazychecking.constant.Constant.MSG_RESEND;
+import static com.lazychecking.www.lazychecking.constant.Constant.MSG_SUCCESS;
 
 /**
  * Created by cwl on 2017/11/23.
@@ -45,7 +54,35 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
     private byte[] picdata;
     private int mScreenWidth;
     private int mScreenHeight;
+    private GradeResult gradeResult;
+    private Mrunnable mrunnable;
     File file;
+    private String filePath;
+
+
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage (Message msg) {//此方法在ui线程运行
+            switch(msg.what) {
+                case MSG_SUCCESS:
+                    GetGradeDialog gradeDialog = new GetGradeDialog();
+                    gradeDialog.getHandler(mHandler);
+                    gradeDialog.show(getFragmentManager(), "GetGradeDialog");
+                    break;
+                case MSG_FAILURE:
+                    Toast.makeText(CustomCamera.this, "扫描失败，请换个角度或者调节灵敏度再次扫描", Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_RESEND:
+                    mrunnable=new Mrunnable(mHandler,filePath);
+                    Thread mThread;
+                    mThread = new Thread(mrunnable);
+                    mThread.start();//线程启动
+                    break;
+
+            }
+        }
+    };
+
     private Camera.PictureCallback picturecamera=new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
@@ -76,7 +113,7 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
                 bm = BitmapFactory.decodeByteArray(data, 0, data.length);
                 if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
-                    String filePath = "/sdcard/"+"temp.jpg";//照片保存路径
+                     filePath = "/sdcard/"+"temp.jpg";//照片保存路径
                     File file = new File(filePath);
                     if (!file.exists()){
                         file.createNewFile();
@@ -85,19 +122,23 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
                     bos = new BufferedOutputStream(new FileOutputStream(file));
                     bos.write(data);
                     bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);//将图片压缩到流中
-                    ThreadServer td=new ThreadServer(file);
-                    td.start();
-                    Log.i("info2", "after: ");
+                    mrunnable=new Mrunnable(mHandler,filePath);
+                         Thread mThread;
+                        mThread = new Thread(mrunnable);
+                        mThread.start();//线程启动
+
+                    //ThreadServer td=new ThreadServer(file);
+                    //td.start();
                     //check(file);
                 }else{
-                   // Toast.makeText(mContext,"没有检测到内存卡", Toast.LENGTH_SHORT).show();
-                    Log.i("info1", "222");
+                   Toast.makeText(CustomCamera.this,"没有检测到内存卡", Toast.LENGTH_SHORT).show();
+                   // Log.i("info1", "222");
                 }
 
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.i("info1", "onPictureTaken1: ");
+               // Log.i("info1", "onPictureTaken1: ");
             } finally {
                 try {
                     bos.flush();//输出
@@ -107,7 +148,7 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
                     mCamera.startPreview();// 开启预览
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.i("info1", "onPictureTaken11: ");
+                    //Log.i("info1", "onPictureTaken11: ");
                 }
             }
 
@@ -148,6 +189,7 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
         mHolder=mPreview.getHolder();
         mHolder.addCallback(this);
         paramms=new RequestParams();
+       gradeResult=GradeResult.getInstance();
 
     }
 
@@ -286,7 +328,7 @@ public class CustomCamera extends BaseActivity implements SurfaceHolder.Callback
                 });*/
                 break;
             case R.id.surfaceView:
-                Log.i("info1", "onClickduijiao: ");
+                //Log.i("info1", "onClickduijiao: ");
                 mCamera.autoFocus(null);//自动对焦
                 break;
 

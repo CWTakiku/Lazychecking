@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.lazychecking.www.lazychecking.R;
 import com.lazychecking.www.lazychecking.activity.CustomCamera;
-import com.lazychecking.www.lazychecking.network.ServerIP;
+import com.lazychecking.www.lazychecking.network.ServerInfo;
 import com.lazychecking.www.lazychecking.view.fragment.BaseFragment;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -27,7 +27,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
     //定义
     private View mContentView;
     private Button mCameraBtn;
-    private ServerIP mIP;
+    private ServerInfo mIP;
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
 
@@ -51,7 +51,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
     private void initView() {
         mCameraBtn= (Button) mContentView.findViewById(R.id.camera_btn);
         mCameraBtn.setOnClickListener(this);
-        mIP=ServerIP.getInstance();
+        mIP= ServerInfo.getInstance();
         preference=mContext.getSharedPreferences("crazyit", MODE_PRIVATE);
         editor=preference.edit();
     }
@@ -61,16 +61,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.camera_btn:
                 //Log.i("info", "onClick: ");
-                if(mIP.getIp()==null)
+                if(mIP.getIp()==null||mIP.getSensitivity()==-1)
                 {
                     //Log.i("info2", "onClick1: ");
                     String ip=preference.getString("serverIP",null);
+                    long sensitivity=preference.getLong("sensitivity",-1);
                     if(ip==null) {
-                        Toast.makeText(mContext, "你还没有设置服务器的IP地址", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "你还没有设置服务器的IP地址！", Toast.LENGTH_SHORT).show();
                         break;
-
+                    }
+                    if(sensitivity==-1){
+                        Toast.makeText(mContext, "你还没有设置扫描阅卷的灵敏度！", Toast.LENGTH_SHORT).show();
+                        break;
                     }
                     mIP.setIp(ip);
+                    mIP.setSensitivity(sensitivity);
                 }
 
                 startActivity(new Intent(mContext, CustomCamera.class));

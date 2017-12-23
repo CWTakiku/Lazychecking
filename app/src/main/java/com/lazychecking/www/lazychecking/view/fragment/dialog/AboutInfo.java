@@ -15,7 +15,7 @@ import com.lazychecking.www.lazychecking.R;
 
 public class AboutInfo extends DialogFragment {
 
-    private View mContentView;
+   // private View mContentView;
 
 
 

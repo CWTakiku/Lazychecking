@@ -17,7 +17,7 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="使用阅卷功能前,请确保开启服务器和设置好服务器IP地址"
+        android:text="使用阅卷功能前,请确保开启服务器和设置好服务器信息"
         android:gravity="center"
         android:layout_weight="0.11" />
 
